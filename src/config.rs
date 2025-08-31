@@ -11,15 +11,6 @@ use serde::Deserialize;
 use serde_json::Value as Json;
 use std::collections::BTreeMap;
 
-#[allow(dead_code)]
-pub const VERSION: &str = env!("CARGO_PKG_VERSION");
-#[allow(dead_code)]
-pub const PKG_NAME: &str = env!("CARGO_PKG_NAME");
-#[allow(dead_code)]
-pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
-#[allow(dead_code)]
-pub const REPOSITORY: &str = env!("CARGO_PKG_REPOSITORY");
-
 /// Top-level config for openlinter.toml
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
@@ -67,7 +58,9 @@ pub struct Files {
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum Decl {
+    #[allow(dead_code)]
     VersionOnly(String),
+    #[allow(dead_code)]
     Detailed(Source),
 }
 
@@ -119,6 +112,7 @@ pub struct RulesetRuntime {
 
 /// Split "<engine>-<ruleset>" into ("engine","ruleset").
 /// Ruleset id may contain additional hyphens; only the first is used to split.
+#[allow(dead_code)]
 pub fn parse_ruleset_key(key: &str) -> Result<(&str, &str)> {
     let mut it = key.splitn(2, '-');
     let eng = it.next().unwrap_or_default();

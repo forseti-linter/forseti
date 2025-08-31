@@ -1,0 +1,5 @@
+# Forseti configuration
+# This is a placeholder. Example:
+# engines:
+#   - name: rust
+#     rulesets: [default]
