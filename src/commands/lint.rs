@@ -1,7 +1,7 @@
 use anyhow::Result;
+use crate::commands::OutputFormat;
+use crate::context::GlobalContext;
 use std::path::PathBuf;
-
-use crate::commands::OutputFormats;
 
 /// Placeholder lint command.
 /// Later, this will:
@@ -11,18 +11,24 @@ use crate::commands::OutputFormats;
 ///  - Walk target path, route files to engines
 ///  - Aggregate and print results; return non-zero on errors
 pub fn run(
+    ctx: &GlobalContext,
     path: &PathBuf,
     fix: bool,
     recursive: bool,
-    output: OutputFormats,
-    output_file: PathBuf,
+    output: OutputFormat,
+    output_file: Option<PathBuf>,
 ) -> Result<()> {
+    ctx.log_verbose(&format!("Starting lint operation in: {}", path.display()));
+    let config_path = ctx.resolve_config_path(path);
+    ctx.log_verbose(&format!("Using config file: {}", config_path.display()));
+    
     println!("Forseti lint");
     println!("       path: {:#?}", path);
     println!("        fix: {}", fix);
     println!("  recursive: {}", recursive);
     println!("     output: {:#?}", output);
     println!("output_file: {:#?}", output_file);
+    println!("config_path: {:#?}", config_path);
 
     // TODO:
     // - Parse config

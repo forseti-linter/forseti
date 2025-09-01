@@ -5,17 +5,17 @@ pub mod init;
 pub mod install;
 pub mod lint;
 
-/// Doc comment
 #[derive(ValueEnum, Clone, Debug)]
-pub enum OutputFormats {
-    String,
-    Junit,
+pub enum OutputFormat {
+    Text,
     Json,
+    Junit,
+    Sarif,
 }
 
 #[derive(Subcommand)]
 pub enum Commands {
-    /// Generates a new .forseti.toml with the base engine and its built in rulesets
+    /// Generate a new .forseti.toml configuration file
     Init {
         /// Target directory (defaults to current directory)
         #[arg(default_value = ".")]
@@ -24,21 +24,21 @@ pub enum Commands {
         #[arg(short, long)]
         force: bool,
     },
-    /// Initialize a Forseti config in the current directory (or provided path)
+    /// Download and install engines and rulesets from configuration
     Install {
-        /// Target directory
+        /// Cache directory for downloaded binaries
         #[arg(short, long, default_value = "~/.forseti/cache")]
         cache_path: PathBuf,
 
-        /// Force overwrite if config already exists
+        /// Enable caching of downloaded binaries
         #[arg(long)]
         enable_cache: bool,
 
-        /// Target directory (defaults to current directory)
+        /// Project directory containing .forseti.toml (defaults to current directory)
         #[arg(default_value = ".")]
         path: PathBuf,
 
-        /// Force overwrite if config already exists
+        /// Force reinstall even if already exists
         #[arg(long)]
         force: bool,
     },
@@ -48,20 +48,20 @@ pub enum Commands {
         #[arg(default_value = ".")]
         path: PathBuf,
 
-        /// Apply automatic fixes where possible
-        #[arg(long, hide = true)]
+        /// Apply automatic fixes where possible (experimental)
+        #[arg(long)]
         fix: bool,
 
-        ///  Looks through all subdirectories recursively (if the engine supports it)
+        /// Recursively scan all subdirectories
         #[arg(short, long)]
         recursive: bool,
 
-        ///  Specifies the output format
-        #[arg(short, long, required = false, default_value = "string")]
-        output: OutputFormats,
+        /// Output format for results
+        #[arg(short, long, default_value = "text")]
+        output: OutputFormat,
 
-        ///  Specifies the output format
-        #[arg(long, required = false, default_value = "string")]
-        output_file: PathBuf,
+        /// Write results to file (defaults to stdout)
+        #[arg(long)]
+        output_file: Option<PathBuf>,
     },
 }

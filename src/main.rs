@@ -4,7 +4,9 @@ use clap::{Parser, command};
 use std::path::PathBuf;
 
 mod commands;
-mod config;
+mod context;
+
+use context::GlobalContext;
 
 #[derive(Parser)]
 #[command(
@@ -14,8 +16,8 @@ mod config;
     propagate_version = true
 )]
 struct Cli {
-    /// Enable verbose output (reserved for future use)
-    #[arg(short, long, global = true, hide = true)]
+    /// Enable verbose output
+    #[arg(short, long, global = true)]
     verbose: bool,
 
     /// Disable colorized output (Happens automatically when an output format other than string is used)
@@ -32,21 +34,24 @@ struct Cli {
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
+    
+    // Create global context from CLI args
+    let ctx = GlobalContext::new(cli.verbose, cli.no_color, cli.config);
 
     match cli.command {
-        Commands::Init { path, force } => commands::init::run(&path, force),
+        Commands::Init { path, force } => commands::init::run(&ctx, &path, force),
         Commands::Install {
             cache_path,
             enable_cache,
             path,
             force,
-        } => commands::install::run(&cache_path, enable_cache, &path, force),
+        } => commands::install::run(&ctx, &cache_path, enable_cache, &path, force),
         Commands::Lint {
             path,
             fix,
             recursive,
             output,
             output_file,
-        } => commands::lint::run(&path, fix, recursive, output, output_file),
+        } => commands::lint::run(&ctx, &path, fix, recursive, output, output_file),
     }
 }
