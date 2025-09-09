@@ -27,7 +27,7 @@ pub enum Commands {
     /// Download and install engines and rulesets from configuration
     Install {
         /// Cache directory for downloaded binaries
-        #[arg(short, long, default_value = "~/.forseti/cache")]
+        #[arg(long, default_value = "~/.forseti/cache")]
         cache_path: PathBuf,
 
         /// Enable caching of downloaded binaries
