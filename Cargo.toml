@@ -1,15 +1,19 @@
 [package]
-name = "openlinter"
-version = "0.1.0"
+name = "forseti"
+version = "0.1.1"
 edition = "2024"
+description = "A linter meant too handle all languages"
+repository = "https://github.com/forseti-linter/forseti"
+readme = "README.md"
+authors = ["Marc Seiler <digitalfiz@proton.me>"]
+license-file = "LICENSE"
 
 [dependencies]
 anyhow = "1.0.99"
-clap = { version = "4.5.46", features = ["derive"] }
-clap_builder = "4.5.46"
+clap = { version = "4.5.46", features = ["derive", "cargo"] }
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.143"
 toml = "0.9.5"
-
-# 
-openlinter_sdk = { path = "../openlinter_sdk" }
+dirs = "5.0"
+walkdir = "2.3"
+forseti_sdk = ">=0.1"

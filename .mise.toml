@@ -7,12 +7,6 @@ VAR_FILE = 'environments/{{get_env(name="ENV", default="dev")}}.tfvars'
 BACKEND_FILE = 'backends/{{get_env(name="ENV", default="dev")}}.s3.tfbackend'
 PLAN_FILE = 'tf.plan'
 
-# [task_config]
-# includes = ['.mise/tofu.toml', '.mise/app.toml']
-
-# [tasks.full_deploy]
-# depends = ['tofu:deploy', 'app:build', 'app:sync']
 
 [tasks.openlinter]
 run = "cargo run --"
-# desc = "Run OpenLinter on the current directory"
