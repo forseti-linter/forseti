@@ -26,7 +26,14 @@ impl GlobalContext {
         if let Some(config) = &self.config_path {
             config.clone()
         } else {
-            base_path.join(".forseti.toml")
+            // If base_path is a file, use its parent directory
+            // If base_path is a directory, use it directly
+            let config_dir = if base_path.is_file() {
+                base_path.parent().unwrap_or(base_path)
+            } else {
+                base_path
+            };
+            config_dir.join(".forseti.toml")
         }
     }
 

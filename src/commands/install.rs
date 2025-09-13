@@ -1,6 +1,6 @@
 use crate::context::GlobalContext;
 use anyhow::{Context, Result, anyhow};
-use forseti_sdk::config::{Config, EngineCfg, RulesetCfg};
+use forseti_sdk::config::{Config, RulesetCfg};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::{env, fs};
@@ -40,16 +40,6 @@ pub fn run(
 }
 
 fn install_dependencies(config: &Config, cache_dir: Option<&PathBuf>, force: bool) -> Result<()> {
-    println!("Installing engines...");
-    for (engine_id, engine_cfg) in &config.engine {
-        if engine_cfg.enabled {
-            install_engine(engine_id, engine_cfg, cache_dir, force)
-                .with_context(|| format!("Failed to install engine '{}'", engine_id))?;
-        } else {
-            println!("Skipping disabled engine: {}", engine_id);
-        }
-    }
-
     println!("Installing rulesets...");
     for (ruleset_id, ruleset_cfg) in &config.ruleset {
         if ruleset_cfg.enabled {
@@ -63,24 +53,6 @@ fn install_dependencies(config: &Config, cache_dir: Option<&PathBuf>, force: boo
     Ok(())
 }
 
-fn install_engine(
-    id: &str,
-    cfg: &EngineCfg,
-    cache_dir: Option<&PathBuf>,
-    force: bool,
-) -> Result<()> {
-    println!("Installing engine: {}", id);
-
-    if let Some(local_path) = &cfg.path {
-        install_from_local("engine", id, local_path, cache_dir, force)?;
-    } else if let Some(git_url) = &cfg.git {
-        install_from_git("engine", id, git_url, cache_dir, force)?;
-    } else {
-        install_from_crates_io("engine", id, cache_dir, force)?;
-    }
-
-    Ok(())
-}
 
 fn install_ruleset(
     id: &str,
