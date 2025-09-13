@@ -1,6 +1,6 @@
 [package]
 name = "forseti"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A linter meant too handle all languages"
 repository = "https://github.com/forseti-linter/forseti"
